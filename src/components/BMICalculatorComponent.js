@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Col, Label, Input, Form, FormGroup, CustomInput } from 'reactstrap';
+import { Button, Col, Label, Input, Form, FormGroup } from 'reactstrap';
 
 class BMICalculator extends Component {
 	constructor(props) {
@@ -158,9 +158,15 @@ class BMICalculator extends Component {
 							</Col>
 						</FormGroup>
 						<FormGroup row>
-							<Col md={{ size: 10, offset: 2 }}>
-								<Button type="submit" color="primary">
+							<Col>
+								<Button type="submit" color="primary" block>
 									Calculate
+								</Button>
+							</Col>
+							<Col xs={7} />
+							<Col>
+								<Button type="submit" color="danger" block onClick={this.props.history.goBack}>
+									Cancel
 								</Button>
 							</Col>
 						</FormGroup>

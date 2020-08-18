@@ -51,7 +51,7 @@ class AddPet extends Component {
 		this.setState({ tags });
 	}
 	render() {
-		const { name, breed, birthDate, gender, isSprayed } = this.state;
+		const { name, breed, birthDate, gender } = this.state;
 
 		return (
 			<div className="row row-content">

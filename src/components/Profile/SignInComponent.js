@@ -1,100 +1,121 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { Link } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
+const paper = {
+	marginTop: 50,
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center'
+};
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		height: '100vh'
-	},
-	image: {
-		backgroundImage: 'url(https://source.unsplash.com/random)',
-		backgroundRepeat: 'no-repeat',
-		backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-		backgroundSize: 'cover',
-		backgroundPosition: 'center'
-	},
-	paper: {
-		margin: theme.spacing(8, 4),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center'
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main
-	},
-	form: {
-		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing(1)
-	},
-	submit: {
-		margin: theme.spacing(3, 0, 2)
+const avatar = {
+	margin: 1,
+	backgroundColor: 'red'
+};
+
+const form = {
+	width: '100%',
+	marginTop: 10
+};
+
+const submit = {
+	marginTop: 20,
+	backgroundColor: 'lightblue',
+	color: 'black'
+};
+
+const INITIAL_STATE = {
+	email: '',
+	password: '',
+	error: null
+};
+class SignIn extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { ...INITIAL_STATE };
 	}
-}));
-
-export default function SignInSide() {
-	const classes = useStyles();
-
-	return (
-		<Grid container component="main" className={classes.root}>
-			<CssBaseline />
-			<Grid item xs={false} sm={4} md={7} className={classes.image} />
-			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-				<div className={classes.paper}>
-					<Avatar className={classes.avatar}>
+	onSubmit = (event) => {
+		// const { email, password } = this.state;
+		// console.log(this.props);
+		this.props.updateAuth(true);
+		this.props.history.push('/home');
+		// this.props.firebase
+		//     .doSignInWithEmailAndPassword(email, password)
+		//     .then((res) => {
+		//         //console.log(res);
+		//         this.setState({ ...INITIAL_STATE });
+		//         this.props.history.push(ROUTES.HOME);
+		//     })
+		//     .catch(error => {
+		//         this.setState({ error });
+		//     });
+		// event.preventDefault();
+	};
+	onChange = (event) => {
+		this.setState({ [event.target.name]: event.target.value });
+	};
+	render() {
+		const { email, password, error } = this.state;
+		const isInvalid = password === '' || email === '';
+		// console.log(this.props);
+		return (
+			<Container component="main" maxWidth="xs">
+				<CssBaseline />
+				<div style={paper}>
+					<Avatar style={avatar}>
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
 						Sign in
 					</Typography>
-					<form className={classes.form} noValidate>
+					<form onSubmit={this.onSubmit} style={form}>
 						<TextField
+							name="email"
+							value={email}
+							onChange={this.onChange}
+							type="text"
+							placeholder="Email Address"
 							variant="outlined"
 							margin="normal"
 							required
 							fullWidth
-							id="email"
-							label="Email Address"
-							name="email"
 							autoComplete="email"
 							autoFocus
 						/>
 						<TextField
+							name="password"
+							value={password}
+							onChange={this.onChange}
+							type="password"
+							placeholder="Password"
 							variant="outlined"
 							margin="normal"
 							required
 							fullWidth
-							name="password"
-							label="Password"
-							type="password"
-							id="password"
-							autoComplete="current-password"
+							autoComplete="email"
+							autoFocus
 						/>
-						<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-						<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+						<Button disabled={isInvalid} type="submit" fullWidth variant="contained" style={submit}>
 							Sign In
 						</Button>
-						<Grid container>
-							<Grid item>
-								<Link to="/signup" variant="body2">
-									{"Don't have an account? Sign Up"}
-								</Link>
-							</Grid>
+						<Grid item>
+							<Link to="/signup" variant="body2">
+								<div style={{ marginTop: 20 }}>Don't have an account? Sign Up</div>
+							</Link>
 						</Grid>
+						{error && <p>{error.message}</p>}
 					</form>
 				</div>
-			</Grid>
-		</Grid>
-	);
+			</Container>
+		);
+	}
 }
+export default withRouter(SignIn);
