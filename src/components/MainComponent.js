@@ -18,42 +18,44 @@ class Main extends Component {
 		super(props);
 
 		this.state = {
-			auth: false
+			auth: false,
+			pets: []
 		};
 	}
 	updateAuthState = (event) => {
 		this.setState({ auth: !this.state.auth });
 	};
+
+	componentDidMount() {
+		fetch('http://localhost:4000/api/pets/get/').then((response) => response.json()).then((data) => {
+			// console.log(data)
+			this.setState({
+				pets: data
+			});
+		});
+	}
+
 	render() {
-		// console.log(this.state.auth);
+		console.log(this.state.pets);
+		
 		const HomePage = () => {
-			return (
-				<Home
-					auth={this.state.auth}
-					// dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
-					// dishesLoading={this.props.dishes.isLoading}
-					// dishesErrMess={this.props.dishes.errMess}
-					// promotions={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
-					// promosLoading={this.props.promotions.isLoading}
-					// promosErrMess={this.props.promotions.errMess}
-					// leader={this.props.leaders.leaders.filter((leader) => leader.featured)[0]}
-					// leaderLoading={this.props.leaders.isLoading}
-					// leaderErrMess={this.props.leaders.errMess}
-				/>
-			);
+			return <Home auth={this.state.auth} pets={this.state.pets} />;
 		};
 
 		const PetWithId = ({ match }) => {
+			// console.log(match.params.petId);
+			// console.log(this.state.pets[0]._id);
+			//console.log(this.state.pets.filter((pet) => pet._id === match.params.petId)[0])
 			return (
 				<PetDetail
-					pet={this.state.pets.pets.filter((pet) => pet.id === parseInt(match.params.pets, 10))[0]}
+					pet={this.state.pets.filter((pet) => pet._id === match.params.petId)[0]}
 					// isLoading={this.props.dishes.isLoading}
 					// errMess={this.props.dishes.errMess}
 					// comments={this.props.comments.comments.filter(
 					// 	(comment) => comment.dishId === parseInt(match.params.dishId, 10)
 					// )}
 					// commentsErrMess={this.props.comments.errMess}
-					postComment={this.props.postComment}
+					// postComment={this.props.postComment}
 				/>
 			);
 		};

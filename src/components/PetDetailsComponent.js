@@ -11,7 +11,7 @@ import {
 	// Col,
 	// Label,
 	// Row,
-	Button,
+	Button
 	// Modal,
 	// ModalHeader,
 	// ModalBody
@@ -20,47 +20,63 @@ import { Link } from 'react-router-dom';
 
 // import { Loading } from './LoadingComponent';
 
-function RenderDish({ dish }) {
+function RenderPet({ pet }) {
 	return (
 		<div className="col-12 col-md-5 m-1">
 			<Card>
-				<CardImg top src={dish.image} alt={dish.name} />
+				{/* <CardImg top src={dish.image} alt={dish.name} /> */}
 				<CardBody>
-					<CardTitle>{dish.name}</CardTitle>
-					<CardText>{dish.description}</CardText>
+					<CardTitle>
+						<b>Pet's Name : </b>
+						{pet.name}
+					</CardTitle>
+					<CardTitle>
+						<b>Pet's Breed : </b>
+						{pet.breed}
+					</CardTitle>
+					<CardTitle>
+						<b>Pet gender : </b>
+						{pet.gender}
+					</CardTitle>
+					<CardText>
+						{pet.name} was born on {pet.dateofbirth.substring(0, 10)}
+					</CardText>
+					<CardText>
+						{pet.name} is {pet.isneutralized ? 'neutralized' : 'not neutralized'}
+					</CardText>
 				</CardBody>
 			</Card>
 		</div>
 	);
 }
 
-function RenderComments({ comments, postComment, dishId }) {
-	if (comments != null)
-		return (
-			<div className="col-12 col-md-5 m-1">
-				<h4>Comments</h4>
-				<ul className="list-unstyled">
-					{comments.map((comment) => {
-						return (
-							<li key={comment.id}>
-								<p>{comment.comment}</p>
-								<p>
-									-- {comment.author} ,{' '}
-									{new Intl.DateTimeFormat('en-US', {
-										year: 'numeric',
-										month: 'short',
-										day: '2-digit'
-									}).format(new Date(Date.parse(comment.date)))}
-								</p>
-							</li>
-						);
-					})}
-				</ul>
-				<CommentForm dishId={dishId} postComment={postComment} />
-			</div>
-		);
-	else return <div />;
-}
+// function RenderComments({ comments, postComment, dishId }) {
+// 	if (comments != null)
+// 		return (
+// 			<div className="col-12 col-md-5 m-1">
+// 				<h4>Comments</h4>
+// 				<ul className="list-unstyled">
+// 					{comments.map((comment) => {
+// 						return (
+// 							<li key={comment.id}>
+// 								<p>{comment.comment}</p>
+// 								<p>
+// 									-- {comment.author} ,{' '}
+// 									{new Intl.DateTimeFormat('en-US', {
+// 										year: 'numeric',
+// 										month: 'short',
+// 										day: '2-digit'
+// 									}).format(new Date(Date.parse(comment.date)))}
+// 								</p>
+// 							</li>
+// 						);
+// 					})}
+// 				</ul>
+// 				<CommentForm petId={dishId} postComment={postComment} />
+// 			</div>
+// 		);
+// 	else return <div />;
+// }
 
 // const required = (val) => val && val.length;
 // const maxLength = (len) => (val) => !val || val.length <= len;
@@ -87,10 +103,11 @@ class CommentForm extends Component {
 
 	handleSubmit(values) {
 		this.toggleModal();
-		this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
+		this.props.postComment(this.props.petId, values.rating, values.author, values.comment);
 	}
 
 	render() {
+		console.log(this.props.pet);
 		return (
 			<div>
 				<Button outline onClick={this.toggleModal}>
@@ -156,29 +173,28 @@ class CommentForm extends Component {
 	}
 }
 
-const DishDetail = (props) => {
-	if (props.dish != null)
-		return (
-			<div className="container">
-				<div className="row">
-					<Breadcrumb>
-						<BreadcrumbItem>
-							<Link to="/menu">Menu</Link>
-						</BreadcrumbItem>
-						<BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
-					</Breadcrumb>
-					<div className="col-12">
-						<h3>{props.dish.name}</h3>
-						<hr />
-					</div>
-				</div>
-				<div className="row">
-					<RenderDish dish={props.dish} />
-					<RenderComments comments={props.comments} postComment={props.postComment} dishId={props.dish.id} />
+const PetDetail = (props) => {
+	console.log(props);
+	return (
+		<div className="container">
+			<div className="row">
+				<Breadcrumb>
+					<BreadcrumbItem>
+						<Link to="/home">Home</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem active>{props.pet.name}</BreadcrumbItem>
+				</Breadcrumb>
+				<div className="col-12">
+					<h3>{props.pet.name.toUpperCase()}</h3>
+					<hr />
 				</div>
 			</div>
-		);
-	else return <div />;
+			<div className="row">
+				<RenderPet pet={props.pet} />
+				<RenderVaccines pet={props.pet} postVaccine={props.postVaccine} dishId={props.dish.id} />
+			</div>
+		</div>
+	);
 };
 
-export default DishDetail;
+export default PetDetail;
