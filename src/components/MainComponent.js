@@ -13,13 +13,19 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 // import About from './AboutComponent';
 
+import { baseUrl } from '../shared/baseUrl';
+import ProtectedRoute from './ProtectedRoute';
+
+// import Public from '../shared/public';
+// import Private from '../shared/private';
+
 class Main extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			auth: false,
-			pets: []
+			pets: [],
+			auth: false
 		};
 	}
 	updateAuthState = (event) => {
@@ -27,7 +33,7 @@ class Main extends Component {
 	};
 
 	componentDidMount() {
-		fetch('http://localhost:4000/api/pets/get/').then((response) => response.json()).then((data) => {
+		fetch(baseUrl + 'get/').then((response) => response.json()).then((data) => {
 			// console.log(data)
 			this.setState({
 				pets: data
@@ -37,9 +43,9 @@ class Main extends Component {
 
 	render() {
 		console.log(this.state.pets);
-		
+
 		const HomePage = () => {
-			return <Home auth={this.state.auth} pets={this.state.pets} />;
+			return <Home pets={this.state.pets} />;
 		};
 
 		const PetWithId = ({ match }) => {
@@ -60,11 +66,15 @@ class Main extends Component {
 			);
 		};
 
+		// const ProtectedRoutePage = () => {
+		// 	return <ProtectedRoute auth={this.state.auth} />;
+		// };
+
 		const SignInPage = () => {
 			return (
 				<SignIn
-					updateAuth={this.updateAuthState}
-					// auth={this.state.auth}
+				// updateAuth={this.updateAuthState}
+				// auth={this.state.auth}
 				/>
 			);
 		};
@@ -72,24 +82,25 @@ class Main extends Component {
 		const SignUpPage = () => {
 			return (
 				<SignUp
-					updateAuth={this.updateAuthState}
-					// auth={this.state.auth}
+				// updateAuth={this.updateAuthState}
+				// auth={this.state.auth}
 				/>
 			);
 		};
+
 		return (
 			<div>
-				<Header auth={this.state.auth} updateAuth={this.updateAuthState} />
+				<Header />
 				<Switch>
 					<Route exact path="/signin" component={SignInPage} />
 					<Route exact path="/signup" component={SignUpPage} />
-					<Route exact path="/home" component={HomePage} />
-					<Route exact path="/add_pet" component={AddPet} />
+					<ProtectedRoute exact path="/home" component={HomePage} />
+					<ProtectedRoute exact path="/add_pet" component={AddPet} />
 					<Route exact path="/bmi_calculator" component={BMICalculator} />
-					<Route path="/home/:petId" component={PetWithId} />
-					<Redirect to="/home" />
+					<ProtectedRoute path="/home/:petId" component={PetWithId} />
+					<ProtectedRoute component={HomePage} />
 				</Switch>
-				<Footer auth={this.state.auth} />
+				{/* <Footer /> */}
 			</div>
 		);
 	}

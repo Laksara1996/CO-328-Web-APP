@@ -18,7 +18,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-// import { Loading } from './LoadingComponent';
+import Footer from './FooterComponent';
 
 function RenderPet({ pet }) {
 	return (
@@ -176,23 +176,26 @@ class CommentForm extends Component {
 const PetDetail = (props) => {
 	console.log(props);
 	return (
-		<div className="container">
-			<div className="row">
-				<Breadcrumb>
-					<BreadcrumbItem>
-						<Link to="/home">Home</Link>
-					</BreadcrumbItem>
-					<BreadcrumbItem active>{props.pet.name}</BreadcrumbItem>
-				</Breadcrumb>
-				<div className="col-12">
-					<h3>{props.pet.name.toUpperCase()}</h3>
-					<hr />
+		<div>
+			<div className="container">
+				<div className="row">
+					<Breadcrumb>
+						<BreadcrumbItem>
+							<Link to="/home">Home</Link>
+						</BreadcrumbItem>
+						<BreadcrumbItem active>{props.pet.name}</BreadcrumbItem>
+					</Breadcrumb>
+					<div className="col-12">
+						<h3>{props.pet.name.toUpperCase()}</h3>
+						<hr />
+					</div>
+				</div>
+				<div className="row">
+					<RenderPet pet={props.pet} />
+					{/* <RenderVaccines pet={props.pet} postVaccine={props.postVaccine} dishId={props.dish.id} /> */}
 				</div>
 			</div>
-			<div className="row">
-				<RenderPet pet={props.pet} />
-				<RenderVaccines pet={props.pet} postVaccine={props.postVaccine} dishId={props.dish.id} />
-			</div>
+			<Footer />
 		</div>
 	);
 };

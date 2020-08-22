@@ -9,6 +9,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import Auth from './Auth';
+
 const paper = {
 	marginTop: 50,
 	display: 'flex',
@@ -45,7 +47,8 @@ class SignIn extends Component {
 	onSubmit = (event) => {
 		// const { email, password } = this.state;
 		// console.log(this.props);
-		this.props.updateAuth(true);
+		// this.props.updateAuth(true);
+		Auth.authenticate();
 		this.props.history.push('/home');
 		// this.props.firebase
 		//     .doSignInWithEmailAndPassword(email, password)

@@ -4,6 +4,8 @@ import { NavLink, withRouter } from 'react-router-dom';
 
 import Logo from '../assests/logo.png';
 
+import Auth from './Profile/Auth'
+
 class Header extends Component {
 	constructor(props) {
 		super(props);
@@ -34,13 +36,14 @@ class Header extends Component {
 	}
 
 	onClick = () => {
-		this.props.updateAuth(false);
+		// this.props.updateAuth(false);
+		Auth.signout();
 		this.props.history.push('/signin');
 	}
 
 	render() {
 		// console.log(this.props);
-		if (this.props.auth) {
+		if (Auth.getAuth()) {
 			return (
 				<React.Fragment>
 					<Navbar dark expand="md">

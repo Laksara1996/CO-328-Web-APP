@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { Container, Button, Card, CardTitle, CardSubtitle } from 'reactstrap';
 
 import './HomeStyle.css';
-//import SignIn from './Profile/SignInComponent';
+import Footer from './FooterComponent';
+
+import { baseUrl } from '../shared/baseUrl';
 
 function RenderPet({ pet }) {
 	return (
@@ -13,8 +15,20 @@ function RenderPet({ pet }) {
 				<CardTitle heading>{pet.name}</CardTitle>
 				<CardSubtitle>{pet.breed}</CardSubtitle>
 			</Link>
+			<Button type="submit" color="danger" block onClick={handleDelete(pet._id)}>
+				Delete
+			</Button>
 		</Card>
 	);
+}
+
+function handleDelete(id) {
+	console.log(id);
+	fetch(baseUrl + 'removepet/' + id, {
+		method: 'DELETE'
+	})
+		.then((res) => res.text()) // or res.json()
+		.then((res) => console.log(res));
 }
 
 class Home extends Component {
@@ -42,6 +56,7 @@ class Home extends Component {
 					</div>
 					<div className="row row-content">{pets}</div>
 				</Container>
+				<Footer />
 			</div>
 		);
 	}
