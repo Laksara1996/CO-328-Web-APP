@@ -52,35 +52,8 @@ class SignUp extends Component {
 	}
 
 	onSubmit = (event) => {
-		// this.props.updateAuth(true);
 		Auth.authenticate();
 		this.props.history.push('/home');
-		//console.log(email);
-		// const { email, password } = this.state;
-		// this.props.firebase
-		//     .doCreateUserWithEmailAndPassword(email, password)
-		//     .then((res) => {
-
-		//         this.setState({
-		//             uid: res.user.uid
-		//         })
-		//         console.log(this.state.uid);
-		//         db.collection("Bus-Owners")
-		//             .doc(this.state.uid)
-		//             .set({
-		//                 firstname: this.state.firstname,
-		//                 lastname: this.state.lastname,
-		//                 email: this.state.email,
-
-		//             })
-		//     })
-		//     .then(authUser => {
-		//         this.setState({ ...INITIAL_STATE });
-		//         this.props.history.push(ROUTES.HOME);
-		//     })
-		//     .catch(error => {
-		//         this.setState({ error });
-		//     });
 		event.preventDefault();
 	};
 
@@ -89,92 +62,92 @@ class SignUp extends Component {
 	};
 
 	render() {
-		const { firstname, lastname, email, password, error } = this.state;
+		const { firstname, lastname, email, password } = this.state;
 
 		const isInvalid = firstname === '' || lastname === '' || password === '' || email === '';
 
 		return (
-				<Container component="main" maxWidth="xs">
-					<CssBaseline />
-					<div style={paper}>
-						<Avatar style={avatar}>
-							<LockOutlinedIcon />
-						</Avatar>
-						<Typography component="h1" variant="h5" style={{ marginBottom: 20 }}>
-							Sign up
-						</Typography>
-						<form onSubmit={this.onSubmit} style={form} noValidate>
-							<Grid container spacing={2}>
-								<Grid item xs={12} sm={6}>
-									<TextField
-										name="firstname"
-										value={firstname}
-										onChange={this.onChange}
-										type="text"
-										autoComplete="firstname"
-										variant="outlined"
-										required
-										fullWidth
-										autoFocus
-										placeholder="First Name"
-									/>
-								</Grid>
-								<Grid item xs={12} sm={6}>
-									<TextField
-										name="lastname"
-										value={lastname}
-										onChange={this.onChange}
-										type="text"
-										autoComplete="lastname"
-										variant="outlined"
-										required
-										fullWidth
-										autoFocus
-										placeholder="Last Name"
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										name="email"
-										value={email}
-										onChange={this.onChange}
-										type="text"
-										placeholder="Email Address"
-										variant="outlined"
-										required
-										fullWidth
-										autoComplete="email"
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										name="password"
-										value={password}
-										onChange={this.onChange}
-										type="password"
-										placeholder="Password"
-										variant="outlined"
-										required
-										fullWidth
-										autoComplete="current-password"
-									/>
-								</Grid>
+			<Container component="main" maxWidth="xs">
+				<CssBaseline />
+				<div style={paper}>
+					<Avatar style={avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
+					<Typography component="h1" variant="h5" style={{ marginBottom: 20 }}>
+						Sign up
+					</Typography>
+					<form onSubmit={this.onSubmit} style={form} noValidate>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									name="firstname"
+									value={firstname}
+									onChange={this.onChange}
+									type="text"
+									autoComplete="firstname"
+									variant="outlined"
+									required
+									fullWidth
+									autoFocus
+									placeholder="First Name"
+								/>
 							</Grid>
-
-							<Button disabled={isInvalid} type="submit" fullWidth variant="contained" style={submit}>
-								Sign Up
-							</Button>
-
-							<Grid container justify="flex-end">
-								<Grid item>
-									<Link to="/signin" variant="body2">
-										<div style={{ marginTop: 20 }}>Already have an account? Sign in</div>
-									</Link>
-								</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									name="lastname"
+									value={lastname}
+									onChange={this.onChange}
+									type="text"
+									autoComplete="lastname"
+									variant="outlined"
+									required
+									fullWidth
+									autoFocus
+									placeholder="Last Name"
+								/>
 							</Grid>
-						</form>
-					</div>
-				</Container>
+							<Grid item xs={12}>
+								<TextField
+									name="email"
+									value={email}
+									onChange={this.onChange}
+									type="text"
+									placeholder="Email Address"
+									variant="outlined"
+									required
+									fullWidth
+									autoComplete="email"
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<TextField
+									name="password"
+									value={password}
+									onChange={this.onChange}
+									type="password"
+									placeholder="Password"
+									variant="outlined"
+									required
+									fullWidth
+									autoComplete="current-password"
+								/>
+							</Grid>
+						</Grid>
+
+						<Button disabled={isInvalid} type="submit" fullWidth variant="contained" style={submit}>
+							Sign Up
+						</Button>
+
+						<Grid container justify="flex-end">
+							<Grid item>
+								<Link to="/signin" variant="body2">
+									<div style={{ marginTop: 20 }}>Already have an account? Sign in</div>
+								</Link>
+							</Grid>
+						</Grid>
+					</form>
+				</div>
+			</Container>
 		);
 	}
 }

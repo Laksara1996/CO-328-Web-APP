@@ -45,22 +45,8 @@ class SignIn extends Component {
 		this.state = { ...INITIAL_STATE };
 	}
 	onSubmit = (event) => {
-		// const { email, password } = this.state;
-		// console.log(this.props);
-		// this.props.updateAuth(true);
 		Auth.authenticate();
 		this.props.history.push('/home');
-		// this.props.firebase
-		//     .doSignInWithEmailAndPassword(email, password)
-		//     .then((res) => {
-		//         //console.log(res);
-		//         this.setState({ ...INITIAL_STATE });
-		//         this.props.history.push(ROUTES.HOME);
-		//     })
-		//     .catch(error => {
-		//         this.setState({ error });
-		//     });
-		// event.preventDefault();
 	};
 	onChange = (event) => {
 		this.setState({ [event.target.name]: event.target.value });
@@ -68,7 +54,6 @@ class SignIn extends Component {
 	render() {
 		const { email, password, error } = this.state;
 		const isInvalid = password === '' || email === '';
-		// console.log(this.props);
 		return (
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />

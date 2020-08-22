@@ -36,13 +36,11 @@ class Header extends Component {
 	}
 
 	onClick = () => {
-		// this.props.updateAuth(false);
 		Auth.signout();
 		this.props.history.push('/signin');
 	}
 
 	render() {
-		// console.log(this.props);
 		if (Auth.getAuth()) {
 			return (
 				<React.Fragment>

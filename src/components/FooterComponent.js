@@ -5,7 +5,6 @@ import Auth from './Profile/Auth';
 
 class Footer extends Component {
 	render() {
-		// console.log(Auth.getAuth());
 		if (Auth.getAuth()) {
 			return (
 				<div className="footer">

@@ -27,7 +27,7 @@ function handleDelete(id) {
 	fetch(baseUrl + 'removepet/' + id, {
 		method: 'DELETE'
 	})
-		.then((res) => res.text()) // or res.json()
+		.then((res) => res.text())
 		.then((res) => console.log(res));
 }
 
@@ -41,7 +41,6 @@ class Home extends Component {
 				</div>
 			);
 		});
-		// console.log(this.props.auth);
 		return (
 			<div>
 				<Container>

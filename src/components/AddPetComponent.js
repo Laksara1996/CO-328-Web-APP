@@ -38,7 +38,6 @@ class AddPet extends Component {
 				if (response.ok) {
 					console.log('add a pet');
 					this.props.history.push('/home');
-					// return response;
 				} else {
 					var error = new Error('Error ' + response.status + ': ' + response.statusText);
 					error.response = response;
@@ -56,9 +55,6 @@ class AddPet extends Component {
 		const target = event.target;
 		const value = target.value;
 		const name = target.name;
-		// alert(name,event.target)
-		// console.log(name, event.target.value);
-		// console.log(this.state);
 
 		this.setState({
 			[name]: value

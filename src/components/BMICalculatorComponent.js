@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Col, Label, Input, Form, FormGroup } from 'reactstrap';
+import { Button, Col, Label, Input, Form, FormGroup, Modal, ModalBody, ModalHeader } from 'reactstrap';
 
 class BMICalculator extends Component {
 	constructor(props) {
@@ -10,24 +10,32 @@ class BMICalculator extends Component {
 			breed: '',
 			gender: '',
 			height: '',
-			weight: ''
+			weight: '',
+			isModalOpen: false,
+			bmi: 0.0
 		};
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.toggleModal = this.toggleModal.bind(this);
+	}
+	toggleModal() {
+		this.setState({
+			isModalOpen: !this.state.isModalOpen
+		});
 	}
 	handleSubmit(event) {
-		// const { title, body, tags, visibility, display } = this.state;
-		console.log('Current State is: ' + JSON.stringify(this.state));
-		//alert('Current State is: ' + this.state);
+		var bmi = (parseFloat(this.state.weight) / (parseFloat(this.state.height) / 100) ** 2).toFixed(2);
+		this.setState({
+			bmi: bmi
+		});
+		console.log(bmi);
+		this.toggleModal();
 		event.preventDefault();
 	}
 	handleInputChange(event) {
 		const target = event.target;
 		const value = target.value;
 		const name = target.name;
-		// alert(name,event.target)
-		// console.log(name, event.target.value);
-		// console.log(this.state);
 
 		this.setState({
 			[name]: value
@@ -171,6 +179,13 @@ class BMICalculator extends Component {
 							</Col>
 						</FormGroup>
 					</Form>
+					<Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+						<ModalHeader toggle={this.toggleModal}>BMI Result</ModalHeader>
+						<ModalBody>
+							{this.state.name} BMI is <br />
+							<b>{this.state.bmi}</b>
+						</ModalBody>
+					</Modal>
 				</div>
 			</div>
 		);
