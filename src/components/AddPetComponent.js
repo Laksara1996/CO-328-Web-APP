@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Col, Label, Input, Form, FormGroup, CustomInput } from 'reactstrap';
+import { Button, Col, Label, Input, Form, FormGroup, CustomInput, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
 import { baseUrl } from '../shared/baseUrl';
 import Footer from './FooterComponent';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 class AddPet extends Component {
 	constructor(props) {
@@ -83,6 +83,12 @@ class AddPet extends Component {
 
 		return (
 			<div>
+				<Breadcrumb>
+					<BreadcrumbItem>
+						<Link to="/home">Home</Link>
+					</BreadcrumbItem>
+					<BreadcrumbItem active>Add Pet</BreadcrumbItem>
+				</Breadcrumb>
 				<div className="row row-content">
 					<div className="col-12">
 						<h3>Add a Pet</h3>
@@ -101,6 +107,7 @@ class AddPet extends Component {
 										placeholder="Russel"
 										value={name}
 										onChange={this.handleInputChange}
+										required
 									/>
 								</Col>
 							</FormGroup>
@@ -115,6 +122,7 @@ class AddPet extends Component {
 										id="breed"
 										value={breed}
 										onChange={this.handleInputChange}
+										required
 									>
 										<option>Golden Retriever</option>
 										<option>German Shepherd</option>
@@ -134,6 +142,7 @@ class AddPet extends Component {
 										id="gender"
 										value={gender}
 										onChange={this.handleInputChange}
+										required
 									>
 										<option>Male</option>
 										<option>Female</option>
@@ -152,12 +161,14 @@ class AddPet extends Component {
 										placeholder="date placeholder"
 										value={birthDate}
 										onChange={this.handleInputChange}
+										required
+
 									/>
 								</Col>
 							</FormGroup>
 							<FormGroup row>
 								<Label htmlFor="title" md={2}>
-									<strong>Sprayed/Neutralized</strong>
+									<strong>Is Sprayed?</strong>
 								</Label>
 								<Col md={10}>
 									<div>

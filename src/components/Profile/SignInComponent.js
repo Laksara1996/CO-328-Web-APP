@@ -45,8 +45,35 @@ class SignIn extends Component {
 		this.state = { ...INITIAL_STATE };
 	}
 	onSubmit = (event) => {
-		Auth.authenticate();
-		this.props.history.push('/home');
+		const signinUser = {
+			email: this.state.email,
+			password: this.state.password
+		};
+		fetch('http://localhost:4000/api/users/signin', {
+			method: 'POST',
+			body: JSON.stringify(signinUser),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin'
+		}).then(
+			(response) => {
+				if (response.ok) {
+					console.log('sign in user');
+					Auth.authenticate();
+					this.props.history.push('/home');
+				} else {
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					console.log('error occured', error);
+					this.setState({ error: error });
+				}
+			},
+			(error) => {
+				throw error;
+			}
+		);
+		event.preventDefault();
 	};
 	onChange = (event) => {
 		this.setState({ [event.target.name]: event.target.value });

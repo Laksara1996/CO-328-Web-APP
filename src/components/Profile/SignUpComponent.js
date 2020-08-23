@@ -52,8 +52,39 @@ class SignUp extends Component {
 	}
 
 	onSubmit = (event) => {
-		Auth.authenticate();
-		this.props.history.push('/home');
+		const newUser = {
+			firstName: this.state.firstname,
+			lastName: this.state.lastname,
+			email: this.state.email,
+			password: this.state.password,
+			error: null
+		};
+		fetch('http://localhost:4000/api/users/signup', {
+			method: 'POST',
+			body: JSON.stringify(newUser),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin'
+		}).then(
+			(response) => {
+				if (response.ok) {
+					console.log('add a user');
+					Auth.authenticate();
+					this.props.history.push('/home');
+				} else {
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					console.log('error occured', error);
+					this.setState({ error: error });
+				}
+			},
+			(error) => {
+				throw error;
+			}
+		);
+
+		// this.props.history.push('/home');
 		event.preventDefault();
 	};
 

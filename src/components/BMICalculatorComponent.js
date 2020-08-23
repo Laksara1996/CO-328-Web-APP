@@ -81,6 +81,7 @@ class BMICalculator extends Component {
 									placeholder="Russel"
 									value={name}
 									onChange={this.handleInputChange}
+									required
 								/>
 							</Col>
 						</FormGroup>
@@ -147,6 +148,7 @@ class BMICalculator extends Component {
 									placeholder="Weight in kg"
 									value={weight}
 									onChange={this.handleInputChange}
+									required
 								/>
 							</Col>
 						</FormGroup>
@@ -162,6 +164,7 @@ class BMICalculator extends Component {
 									placeholder="Height in cm"
 									value={height}
 									onChange={this.handleInputChange}
+									required
 								/>
 							</Col>
 						</FormGroup>
