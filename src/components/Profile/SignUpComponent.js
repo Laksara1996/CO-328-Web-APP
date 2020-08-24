@@ -10,8 +10,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 
-import Auth from './Auth';
-
 const paper = {
 	marginTop: 50,
 	display: 'flex',
@@ -66,25 +64,29 @@ class SignUp extends Component {
 				'Content-Type': 'application/json'
 			},
 			credentials: 'same-origin'
-		}).then(
-			(response) => {
-				if (response.ok) {
-					console.log('add a user');
-					Auth.authenticate();
-					this.props.history.push('/home');
-				} else {
-					var error = new Error('Error ' + response.status + ': ' + response.statusText);
-					error.response = response;
-					console.log('error occured', error);
-					this.setState({ error: error });
+		})
+			.then(
+				(response) => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						var error = new Error('Error ' + response.status + ': ' + response.statusText);
+						error.response = response;
+						// console.log('error occured', error);
+						this.setState({ error: error });
+					}
+				},
+				(error) => {
+					throw error;
 				}
-			},
-			(error) => {
-				throw error;
-			}
-		);
+			)
+			.then((result) => {
+				// console.log(result);
+				localStorage.setItem('auth', result.token);
+				// Auth.authenticate();
+				this.props.history.push('/home');
+			});
 
-		// this.props.history.push('/home');
 		event.preventDefault();
 	};
 

@@ -9,8 +9,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-import Auth from './Auth';
-
 const paper = {
 	marginTop: 50,
 	display: 'flex',
@@ -56,23 +54,28 @@ class SignIn extends Component {
 				'Content-Type': 'application/json'
 			},
 			credentials: 'same-origin'
-		}).then(
-			(response) => {
-				if (response.ok) {
-					console.log('sign in user');
-					Auth.authenticate();
-					this.props.history.push('/home');
-				} else {
-					var error = new Error('Error ' + response.status + ': ' + response.statusText);
-					error.response = response;
-					console.log('error occured', error);
-					this.setState({ error: error });
+		})
+			.then(
+				(response) => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						var error = new Error('Error ' + response.status + ': ' + response.statusText);
+						error.response = response;
+						// console.log('error occured', error);
+						this.setState({ error: error });
+					}
+				},
+				(error) => {
+					throw error;
 				}
-			},
-			(error) => {
-				throw error;
-			}
-		);
+			)
+			.then((result) => {
+				// console.log(result);
+				localStorage.setItem('auth', result.token)
+				// Auth.authenticate();
+				this.props.history.push('/home');
+			});
 		event.preventDefault();
 	};
 	onChange = (event) => {

@@ -21,6 +21,7 @@ class Main extends Component {
 
 		this.state = {
 			pets: [],
+			vaccines: [],
 			auth: false
 		};
 	}
@@ -37,13 +38,15 @@ class Main extends Component {
 	}
 
 	render() {
-		console.log(this.state.pets);
+		// console.log(this.state.pets);
 
 		const HomePage = () => {
 			return <Home pets={this.state.pets} />;
 		};
 
 		const PetWithId = ({ match }) => {
+			// console.log(match);
+			// console.log();
 			return <PetDetail pet={this.state.pets.filter((pet) => pet._id === match.params.petId)[0]} />;
 		};
 
@@ -56,7 +59,7 @@ class Main extends Component {
 					<ProtectedRoute exact path="/home" component={HomePage} />
 					<ProtectedRoute exact path="/add_pet" component={AddPet} />
 					<Route exact path="/bmi_calculator" component={BMICalculator} />
-					<ProtectedRoute path="/home/:petId" component={PetWithId} />
+					<Route path="/home/:petId" component={PetWithId} />
 					<ProtectedRoute exact path="/aboutus" component={About} />
 					<ProtectedRoute exact path="/contactus" component={Contact} />
 					<ProtectedRoute component={HomePage} />

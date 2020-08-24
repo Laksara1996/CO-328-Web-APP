@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 
 import {
 	Card,
-	CardImg,
 	CardText,
 	CardBody,
 	CardTitle,
 	Breadcrumb,
 	BreadcrumbItem,
-	// Col,
-	// Label,
-	// Row,
-	Button
-	// Modal,
-	// ModalHeader,
-	// ModalBody
+	Col,
+	Label,
+	Form,
+	Button,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	FormGroup,
+	Input
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -50,46 +51,102 @@ function RenderPet({ pet }) {
 	);
 }
 
-// function RenderComments({ comments, postComment, dishId }) {
-// 	if (comments != null)
-// 		return (
-// 			<div className="col-12 col-md-5 m-1">
-// 				<h4>Comments</h4>
-// 				<ul className="list-unstyled">
-// 					{comments.map((comment) => {
-// 						return (
-// 							<li key={comment.id}>
-// 								<p>{comment.comment}</p>
-// 								<p>
-// 									-- {comment.author} ,{' '}
-// 									{new Intl.DateTimeFormat('en-US', {
-// 										year: 'numeric',
-// 										month: 'short',
-// 										day: '2-digit'
-// 									}).format(new Date(Date.parse(comment.date)))}
-// 								</p>
-// 							</li>
-// 						);
-// 					})}
-// 				</ul>
-// 				<CommentForm petId={dishId} postComment={postComment} />
-// 			</div>
-// 		);
-// 	else return <div />;
-// }
+class RenderVaccines extends Component {
+	handleDelete(id) {
+		// console.log('http://localhost:4000/api/medications/removemedication/' + id);
+		fetch('http://localhost:4000/api/medications/removemedication/' + id, {
+			method: 'DELETE'
+		}).then(
+			(response) => {
+				if (response.ok) {
+					// window.location.reload(false);
+					// this.props.history.push('/home');
+					// window.location = '/home/' + ;
+				} else {
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					// console.log('error occured', error);
+					this.setState({ error: error });
+				}
+			},
+			(error) => {
+				throw error;
+			}
+		);
+	}
+	render() {
+		if (this.props.vaccines != null)
+			return (
+				<div className="col-12 col-md-5 m-1">
+					{/* <h4>Vaccines</h4> */}
+
+					{/* <CardImg top src={dish.image} alt={dish.name} /> */}
+
+					<ul className="list-unstyled">
+						{this.props.vaccines.map((vaccine) => {
+							// console.log(vaccine)
+							return (
+								<li key={vaccine.id}>
+									<Card>
+										<CardBody>
+											<CardTitle>
+												<b>Vaccine Name : </b>
+												{vaccine.name}
+											</CardTitle>
+											<CardTitle>
+												<b>Vaccine Type : </b>
+												{vaccine.type}
+											</CardTitle>
+											<CardTitle>
+												<b>Vaccine Dose : </b>
+												{vaccine.dose}
+											</CardTitle>
+											<CardTitle>
+												<b>Vaccine Give Date : </b>
+												{vaccine.givenDate.substring(0, 10)}
+											</CardTitle>
+											<CardTitle>
+												<b>Vaccine Next Date : </b>
+												{vaccine.nextDate.substring(0, 10)}
+											</CardTitle>
+										</CardBody>
+										<Button
+											type="submit"
+											color="danger"
+											block
+											onClick={this.handleDelete.bind(this, vaccine._id)}
+										>
+											Delete
+										</Button>
+									</Card>
+								</li>
+							);
+						})}
+					</ul>
+					<VaccineForm petId={this.props.petId} />
+				</div>
+			);
+		else return <div />;
+	}
+}
 
 // const required = (val) => val && val.length;
 // const maxLength = (len) => (val) => !val || val.length <= len;
 // const minLength = (len) => (val) => val && val.length >= len;
 
-class CommentForm extends Component {
+class VaccineForm extends Component {
 	constructor(props) {
 		super(props);
 
 		this.toggleModal = this.toggleModal.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-
+		this.handleInputChange = this.handleInputChange.bind(this);
 		this.state = {
+			name: '',
+			dose: '',
+			type: '',
+			givenDate: '',
+			nextDate: '',
 			isNavOpen: false,
 			isModalOpen: false
 		};
@@ -101,103 +158,211 @@ class CommentForm extends Component {
 		});
 	}
 
-	handleSubmit(values) {
+	handleInputChange(event) {
+		const target = event.target;
+		const value = target.value;
+		const name = target.name;
+		// console.log(name);
+		this.setState({
+			[name]: value
+		});
+	}
+
+	handleSubmit(event) {
 		this.toggleModal();
-		this.props.postComment(this.props.petId, values.rating, values.author, values.comment);
+		// console.log(this.state);
+		const newVaccine = {
+			name: this.state.name,
+			pet: this.props.petId,
+			dose: this.state.dose,
+			type: this.state.type,
+			givenDate: this.state.givenDate,
+			nextDate: this.state.nextDate
+		};
+		fetch('http://localhost:4000/api/medications/addmedication', {
+			method: 'POST',
+			body: JSON.stringify(newVaccine),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'same-origin'
+		}).then(
+			(response) => {
+				if (response.ok) {
+					// console.log('add a vaccine');
+					// this.props.history.push('/home');
+					// window.location.reload(false);
+				} else {
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					// console.log('error occured', error);
+					throw error;
+				}
+			},
+			(error) => {
+				throw error;
+			}
+		);
+		event.preventDefault();
 	}
 
 	render() {
-		console.log(this.props.pet);
+		const { name, type, dose, givenDate, nextDate } = this.state;
+		// console.log(this.props.pet);
 		return (
 			<div>
 				<Button outline onClick={this.toggleModal}>
-					<span className="fa fa-pencil fa-lg" /> Submit Comment
+					<span className="fa fa-pencil fa-lg" /> Add a Vaccine
 				</Button>
-				{/* <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-					<ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+				<Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+					<ModalHeader toggle={this.toggleModal}>Add a Vaccine</ModalHeader>
 					<ModalBody>
-						<LocalForm onSubmit={(values) => this.handleSubmit(values)}>
-							<Row className="form-group">
-								<Col>
-									<Label htmlFor="rating">Rating</Label>
-									<Control.select model=".rating" id="rating" className="form-control">
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-									</Control.select>
-								</Col>
-							</Row>
-							<Row className="form-group">
-								<Col>
-									<Label htmlFor="author">Your Name</Label>
-									<Control.text
-										model=".author"
-										id="author"
-										name="author"
-										placeholder="Your Name"
-										className="form-control"
-										validators={{
-											required,
-											minLength: minLength(3),
-											maxLength: maxLength(15)
-										}}
-									/>
-									<Errors
-										className="text-danger"
-										model=".yourname"
-										show="touched"
-										messages={{
-											required: 'Required',
-											minLength: 'Must be greater than 2 characters',
-											maxLength: 'Must be 15 characters or less'
-										}}
+						<Form onSubmit={this.handleSubmit}>
+							<FormGroup row>
+								<Label htmlFor="title" md={2}>
+									<strong>Vaccine Name</strong>
+								</Label>
+								<Col md={10}>
+									<Input
+										type="text"
+										id="name"
+										name="name"
+										placeholder="A1H"
+										value={name}
+										onChange={this.handleInputChange}
+										required
 									/>
 								</Col>
-							</Row>
-							<Row className="form-group">
-								<Col>
-									<Label htmlFor="comment">Comment</Label>
-									<Control.textarea model=".comment" id="comment" rows="6" className="form-control" />
+							</FormGroup>
+							<FormGroup row>
+								<Label htmlFor="title" md={2}>
+									<strong>Dose</strong>
+								</Label>
+								<Col md={10}>
+									<Input
+										type="text"
+										id="dose"
+										name="dose"
+										placeholder="2mg"
+										value={dose}
+										onChange={this.handleInputChange}
+										required
+									/>
 								</Col>
-							</Row>
-							<Button type="submit" className="bg-primary">
-								Submit
-							</Button>
-						</LocalForm>
+							</FormGroup>
+							<FormGroup row>
+								<Label htmlFor="title" md={2}>
+									<strong>Type</strong>
+								</Label>
+								<Col md={10}>
+									<Input
+										type="text"
+										id="type"
+										name="type"
+										placeholder="Oral"
+										value={type}
+										onChange={this.handleInputChange}
+										required
+									/>
+								</Col>
+							</FormGroup>
+							<FormGroup row>
+								<Label htmlFor="title" md={2}>
+									<strong>Given Date</strong>
+								</Label>
+								<Col md={10}>
+									<Input
+										type="date"
+										name="givenDate"
+										id="givenDate"
+										placeholder="date placeholder"
+										value={givenDate}
+										onChange={this.handleInputChange}
+										required
+									/>
+								</Col>
+							</FormGroup>
+							<FormGroup row>
+								<Label htmlFor="title" md={2}>
+									<strong>Next Date</strong>
+								</Label>
+								<Col md={10}>
+									<Input
+										type="date"
+										name="nextDate"
+										id="nextDate"
+										placeholder="date placeholder"
+										value={nextDate}
+										onChange={this.handleInputChange}
+										required
+									/>
+								</Col>
+							</FormGroup>
+							<FormGroup row>
+								<Col md={{ size: 10, offset: 2 }}>
+									<Button type="submit" color="primary">
+										Add a Vaccine
+									</Button>
+								</Col>
+							</FormGroup>
+						</Form>
 					</ModalBody>
-				</Modal> */}
+				</Modal>
 			</div>
 		);
 	}
 }
 
-const PetDetail = (props) => {
-	console.log(props);
-	return (
-		<div>
-			<div className="container">
-				<div className="row">
-					<Breadcrumb>
-						<BreadcrumbItem>
-							<Link to="/home">Home</Link>
-						</BreadcrumbItem>
-						<BreadcrumbItem active>{props.pet.name}</BreadcrumbItem>
-					</Breadcrumb>
-					<div className="col-12">
-						<h3>{props.pet.name.toUpperCase()}</h3>
-						<hr />
+class PetDetail extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			vaccines: []
+		};
+	}
+	componentDidMount() {
+		// console.log('http://localhost:4000/api/medications/getmedlistbypetid/' + this.props.pet._id);
+		fetch('http://localhost:4000/api/medications/getmedlistbypetid/' + this.props.pet._id)
+			// fetch('http://localhost:4000/api/medications/getmedlistbypetid/5f420bd2cf9028441867b72f')
+			.then((response) => response.json())
+			.then((data) => {
+				this.setState({
+					vaccines: data
+				});
+			});
+	}
+	render() {
+		// console.log(this.state);
+
+		return (
+			<div>
+				<div className="container">
+					<div className="row">
+						<Breadcrumb>
+							<BreadcrumbItem>
+								<Link to="/home">Home</Link>
+							</BreadcrumbItem>
+							<BreadcrumbItem active>{this.props.pet.name}</BreadcrumbItem>
+						</Breadcrumb>
+						<div className="col-12">
+							<h3>{this.props.pet.name.toUpperCase()}</h3>
+							<hr />
+						</div>
+					</div>
+					<div className="row">
+						<RenderPet pet={this.props.pet} />
+						<RenderVaccines
+							vaccines={this.state.vaccines}
+							postVaccine={this.props.postVaccine}
+							petId={this.props.pet._id}
+						/>
 					</div>
 				</div>
-				<div className="row">
-					<RenderPet pet={props.pet} />
-					{/* <RenderVaccines pet={props.pet} postVaccine={props.postVaccine} dishId={props.dish.id} /> */}
-				</div>
+				<Footer />
 			</div>
-			<Footer />
-		</div>
-	);
-};
+		);
+	}
+}
 
 export default PetDetail;

@@ -6,34 +6,49 @@ import { Container, Button, Card, CardTitle, CardSubtitle } from 'reactstrap';
 import './HomeStyle.css';
 import Footer from './FooterComponent';
 
-import { baseUrl } from '../shared/baseUrl';
+// import { baseUrl } from '../shared/baseUrl';
 
-function RenderPet({ pet }) {
-	return (
-		<Card>
-			<Link to={`/home/${pet._id}`}>
-				<CardTitle heading>{pet.name}</CardTitle>
-				<CardSubtitle>{pet.breed}</CardSubtitle>
-			</Link>
-			<Button type="submit" color="danger" block onClick={handleDelete(pet._id)}>
-				Delete
-			</Button>
-		</Card>
-	);
-}
-
-function handleDelete(id) {
-	console.log(id);
-	fetch(baseUrl + 'removepet/' + id, {
-		method: 'DELETE'
-	})
-		.then((res) => res.text())
-		.then((res) => console.log(res));
+class RenderPet extends Component {
+	handleDelete(id) {
+		// console.log('http://localhost:4000/api/pets/removepet/' + id);
+		fetch('http://localhost:4000/api/pets/removepet/' + id, {
+			method: 'DELETE'
+		}).then(
+			(response) => {
+				if (response.ok) {
+					// window.location.reload(false);
+					// this.props.history.push('/home');
+					window.location = '/home';
+				} else {
+					var error = new Error('Error ' + response.status + ': ' + response.statusText);
+					error.response = response;
+					// console.log('error occured', error);
+					this.setState({ error: error });
+				}
+			},
+			(error) => {
+				throw error;
+			}
+		);
+	}
+	render() {
+		return (
+			<Card>
+				<Link to={`/home/${this.props.pet._id}`}>
+					<CardTitle heading>{this.props.pet.name}</CardTitle>
+					<CardSubtitle>{this.props.pet.breed}</CardSubtitle>
+				</Link>
+				<Button type="submit" color="danger" block onClick={this.handleDelete.bind(this,this.props.pet._id)}>
+					Delete
+				</Button>
+			</Card>
+		);
+	}
 }
 
 class Home extends Component {
 	render() {
-		console.log(this.props);
+		// console.log(this.props);
 		const pets = this.props.pets.map((pet) => {
 			return (
 				<div key={pet.id} className="col-12 col-md-5 m-1">

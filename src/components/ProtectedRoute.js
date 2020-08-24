@@ -1,14 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import Auth from './Profile/Auth';
-
 class ProtectedRoute extends React.Component {
 	render() {
-		console.log(Auth.getAuth());
+		// console.log(Auth.getAuth());
 		const Component = this.props.component;
-		const isAuthenticated = Auth.getAuth();
+		// const isAuthenticated = Auth.getAuth();
 
+		const isAuthenticated = localStorage.getItem('auth') ? true : false;
+		// console.log(isAuthenticated);
 		return isAuthenticated ? <Component /> : <Redirect to={{ pathname: '/signin' }} />;
 	}
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Col, Label, Input, Form, FormGroup, CustomInput, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
-import { baseUrl } from '../shared/baseUrl';
+// import { baseUrl } from '../shared/baseUrl';
 import Footer from './FooterComponent';
 import { withRouter, Link } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ class AddPet extends Component {
 			dateofbirth: this.state.birthDate,
 			isneutralized: this.state.isSprayed
 		};
-		fetch(baseUrl + 'addpet', {
+		fetch('http://localhost:4000/api/pets/addpet', {
 			method: 'POST',
 			body: JSON.stringify(newPet),
 			headers: {
@@ -36,12 +36,13 @@ class AddPet extends Component {
 		}).then(
 			(response) => {
 				if (response.ok) {
-					console.log('add a pet');
+					// console.log('add a pet');
 					this.props.history.push('/home');
+					window.location.reload(false);
 				} else {
 					var error = new Error('Error ' + response.status + ': ' + response.statusText);
 					error.response = response;
-					console.log('error occured', error);
+					// console.log('error occured', error);
 					throw error;
 				}
 			},
@@ -162,7 +163,6 @@ class AddPet extends Component {
 										value={birthDate}
 										onChange={this.handleInputChange}
 										required
-
 									/>
 								</Col>
 							</FormGroup>

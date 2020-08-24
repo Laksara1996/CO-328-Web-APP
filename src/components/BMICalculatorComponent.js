@@ -28,7 +28,7 @@ class BMICalculator extends Component {
 		this.setState({
 			bmi: bmi
 		});
-		console.log(bmi);
+		// console.log(bmi);
 		this.toggleModal();
 		event.preventDefault();
 	}

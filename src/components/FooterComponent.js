@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Auth from './Profile/Auth';
-
 class Footer extends Component {
 	render() {
-		if (Auth.getAuth()) {
+		if (localStorage.getItem('auth') != null) {
 			return (
 				<div className="footer">
 					<div className="container">
